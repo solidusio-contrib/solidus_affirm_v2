@@ -17,7 +17,7 @@ module SolidusAffirmV2
           }
         )
 
-        remove_tax!(payment.order) if authorized_affirm.provider == "katapult"
+        remove_tax!(payment.order) if authorized_affirm.provider_id == :katapult
 
         payment.amount = authorized_affirm.amount / 100.0
         payment.save!
