@@ -33,7 +33,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
   end
 
   describe "#authorize" do
-    let(:affirm_transaction_response) { Affirm::Struct::Transaction.new( {id: transaction_id}) }
+    let(:affirm_transaction_response) { Affirm::Struct::Transaction.new({ id: transaction_id, provider_id: 2 }) }
     let(:am_response) { subject.authorize(nil, affirm_v2_transaction) }
 
     before do
@@ -58,7 +58,6 @@ RSpec.describe SolidusAffirmV2::Gateway do
       before do
         allow_any_instance_of(::Affirm::Client).to receive(:authorize).and_raise(Affirm::RequestError, "The transaction has already been authorized.")
       end
-
 
       it "will return an unsuccesfull ActiveMerchant::Response" do
         expect(am_response.success?).to be_falsy

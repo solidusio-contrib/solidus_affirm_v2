@@ -9,6 +9,5 @@ FactoryBot.define do
   factory :captured_affirm_v2_payment, class: Spree::Payment do
     payment_method { create(:affirm_v2_payment_method) }
     source { create(:affirm_v2_transaction) }
-    response_code { '123456789' }
   end
 end

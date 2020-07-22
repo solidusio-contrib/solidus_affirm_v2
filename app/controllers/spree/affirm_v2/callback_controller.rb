@@ -8,6 +8,7 @@ module Spree
       def confirm
         checkout_token = affirm_params[:checkout_token]
         order = Spree::Order.find(affirm_params[:order_id])
+        payment_method = SolidusAffirmV2::PaymentMethod.find(affirm_params[:payment_method_id])
 
         if !checkout_token
           return redirect_to checkout_state_path(order.state), notice: "Invalid order confirmation data passed in"
@@ -17,17 +18,24 @@ module Spree
           return redirect_to spree.order_path(order), notice: "Order is already in complete state"
         end
 
-        affirm_source_transaction = SolidusAffirmV2::Transaction.new(checkout_token: checkout_token)
+        affirm_transaction_object = payment_method.gateway.get_transaction(checkout_token)
+        
+        affirm_source_transaction = SolidusAffirmV2::Transaction.new(
+          transaction_id: affirm_transaction_object.id,
+          checkout_token: affirm_transaction_object.checkout_id,
+          provider: affirm_transaction_object.provider
+        )
 
         affirm_source_transaction.transaction do
           if affirm_source_transaction.save!
             payment = order.payments.create!({
               payment_method_id: affirm_params[:payment_method_id],
-              source: affirm_source_transaction
+              source: affirm_source_transaction,
+              amount: affirm_transaction_object.amount / 100.0
             })
-            hook = SolidusAffirmV2::Config.callback_hook.new
-            hook.authorize!(payment)
-            redirect_to hook.after_authorize_url(order)
+            
+            order.next! unless order.state == 'confirm'
+            redirect_to checkout_state_path(order.state)
           end
         end
       end
