@@ -51,12 +51,11 @@ RSpec.describe Spree::AffirmV2::CallbackController do
       let(:affirm_payment_source) { create(:affirm_v2_transaction) }
       let(:checkout_token) { "TKLKJ71GOP9YSASU" }
       let(:transaction_id) { "N330-Z6D4" }
-
-      let!(:affirm_transaction_response) { Affirm::Struct::Transaction.new({ id: transaction_id, provider_id: 1, amount: 42499, status: "authorized" }) }
+      let(:provider_id) { 1 }
+      let!(:affirm_checkout_response) { Affirm::Struct::Transaction.new({ id: transaction_id, checkout_id: checkout_token, amount: 42499, order_id: order.id, provider_id: provider_id }) }
 
       before do
-        allow_any_instance_of(Affirm::Client).to receive(:authorize).with(checkout_token).and_return(affirm_transaction_response)
-        allow_any_instance_of(Affirm::Client).to receive(:read_transaction).with(transaction_id).and_return(affirm_transaction_response)
+        allow_any_instance_of(Affirm::Client).to receive(:read_transaction).with(checkout_token).and_return(affirm_checkout_response)
       end
 
       it "creates a payment" do
@@ -68,6 +67,16 @@ RSpec.describe Spree::AffirmV2::CallbackController do
             use_route: :spree
           }
         }.to change{ order.payments.count }.from(0).to(1)
+      end
+
+      it "creates a payment with the right amount" do
+        post '/affirm_v2/confirm', params: {
+          checkout_token: checkout_token,
+          payment_method_id: payment_method.id,
+          order_id: order.id,
+          use_route: :spree
+        }
+        expect(order.payments.last.amount).to eql 424.99
       end
 
       it "creates a SolidusAffirmV2::Transaction" do

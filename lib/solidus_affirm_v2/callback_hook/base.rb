@@ -3,40 +3,7 @@
 module SolidusAffirmV2
   module CallbackHook
     class Base
-      def authorize!(payment)
-        payment.process!
-        authorized_affirm = Affirm::Client.new.read_transaction(payment.transaction_id)
-
-        payment.source.update(
-          {
-            transaction_id: authorized_affirm.id,
-            provider: authorized_affirm.provider
-          }
-        )
-
-        remove_tax!(payment.order) if authorized_affirm.provider == :katapult
-
-        payment.amount = authorized_affirm.amount / 100.0
-        payment.save!
-        payment.order.next! if payment.order.payment?
-      end
-
-      def after_authorize_url(order)
-        order_state_checkout_path(order)
-      end
-
       def after_cancel_url(order)
-        order_state_checkout_path(order)
-      end
-
-      protected
-
-      def remove_tax!(order)
-      end
-
-      private
-
-      def order_state_checkout_path(order)
         Spree::Core::Engine.routes.url_helpers.checkout_state_path(order.state)
       end
     end

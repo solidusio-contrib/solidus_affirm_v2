@@ -14,7 +14,7 @@ module SolidusAffirmV2
 
     def authorize(_money, affirm_source, _options = {})
       begin
-        response = ::Affirm::Client.new.authorize(affirm_source.checkout_token)
+        response = ::Affirm::Client.new.authorize(affirm_source.transaction_id)
         return ActiveMerchant::Billing::Response.new(true, "Transaction Approved", {}, authorization: response.id)
       rescue Exception => e
         return ActiveMerchant::Billing::Response.new(false, e.message)
@@ -46,6 +46,31 @@ module SolidusAffirmV2
       rescue Exception => e
         return ActiveMerchant::Billing::Response.new(false, e.message)
       end
+    end
+
+    def purchase(money, affirm_source, options = {})
+      result = authorize(money, affirm_source, options)
+      return result unless result.success?
+      capture(money, result.authorization, options)
+    end
+
+    def try_void(payment)
+      transaction_id = payment.source.transaction_id
+      begin
+        transaction = get_transaction(transaction_id)
+      rescue Exception => e
+        return ActiveMerchant::Billing::Response.new(false, e.message)
+      end
+
+      if transaction.status == "authorized"
+        void(transaction_id, nil, {})
+      else
+        false
+      end
+    end
+    
+    def get_transaction(checkout_token)
+      ::Affirm::Client.new.read_transaction(checkout_token)
     end
   end
 end

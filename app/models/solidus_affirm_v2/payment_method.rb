@@ -6,6 +6,8 @@ module SolidusAffirmV2
     preference :private_api_key, :string
     preference :javascript_url, :string
 
+    delegate :try_void, to: :gateway
+
     def payment_source_class
       Transaction
     end
@@ -24,30 +26,6 @@ module SolidusAffirmV2
 
     def payment_profiles_supported?
       false
-    end
-
-    # Affirm doesn't have a purchase endpoint
-    # so autocapture doesn't make sense. Especially because you have to
-    # leave the store and come back to confirm your order. Stores should
-    # capture affirm payments after the order transitions to complete.
-    # @return false
-    def auto_capture
-      false
-    end
-
-    def try_void(payment)
-      transaction_id = payment.response_code
-      begin
-        transaction = gateway.get_transaction(transaction_id)
-      rescue Exception => e
-        return ActiveMerchant::Billing::Response.new(false, e.message)
-      end
-
-      if transaction.status == "authorized"
-        void(transaction_id, nil, {})
-      else
-        false
-      end
     end
 
     protected
