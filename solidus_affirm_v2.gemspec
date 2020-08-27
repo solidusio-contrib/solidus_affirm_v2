@@ -34,5 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'active_model_serializers', '~> 0.10'
   spec.add_dependency 'affirm-ruby-api', '~> 1.0'
   
+  spec.add_development_dependency 'solidus_dev_support'
   spec.add_development_dependency 'webmock'
 end

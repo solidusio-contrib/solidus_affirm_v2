@@ -23,8 +23,6 @@ else
   gem 'sqlite3'
 end
 
-gem 'solidus_dev_support', github: 'solidusio/solidus_dev_support'
-
 gemspec
 
 # Use a local Gemfile to include development dependencies that might not be
