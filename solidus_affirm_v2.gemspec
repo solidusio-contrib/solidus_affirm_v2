@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = 'info@peterberkenbosch.nl'
 
   spec.summary = 'Solidus extension for using Affirm financing payments in your store'
-  spec.description = 'Solidus extenstion that integrates your store with Affirm financing payments using the new Transaction API '
+  spec.description = 'Solidus extenstion that integrates your store with Affirm financing payments using the new Transaction API' # rubocop:disable Layout/LineLength
   spec.homepage = 'https://github.com/solidusio-contrib/solidus_affirm_v2'
   spec.license = 'BSD-3-Clause'
 
@@ -29,11 +29,11 @@ Gem::Specification.new do |spec|
   spec.executables = files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'solidus_core', ['>= 2.0.0', '< 3']
-  spec.add_dependency 'solidus_support', '~> 0.5'
   spec.add_dependency 'active_model_serializers', '~> 0.10'
   spec.add_dependency 'affirm-ruby-api', '~> 1.0'
-  
+  spec.add_dependency 'solidus_core', ['>= 2.0.0', '< 3']
+  spec.add_dependency 'solidus_support', '~> 0.5'
+
   spec.add_development_dependency 'solidus_dev_support'
   spec.add_development_dependency 'webmock'
 end

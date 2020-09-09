@@ -1,6 +1,9 @@
 require 'spec_helper'
 require 'affirm'
 
+# rubocop:disable RSpec/AnyInstance
+# rubocop:disable Layout/LineLength
+
 RSpec.describe Spree::AffirmV2::CallbackController do
   let(:order) { create(:order_with_totals) }
   let(:checkout_token) { "FOOBAR123" }
@@ -52,7 +55,7 @@ RSpec.describe Spree::AffirmV2::CallbackController do
       let(:checkout_token) { "TKLKJ71GOP9YSASU" }
       let(:transaction_id) { "N330-Z6D4" }
       let(:provider_id) { 1 }
-      let!(:affirm_checkout_response) { Affirm::Struct::Transaction.new({ id: transaction_id, checkout_id: checkout_token, amount: 42499, order_id: order.id, provider_id: provider_id }) }
+      let!(:affirm_checkout_response) { Affirm::Struct::Transaction.new({ id: transaction_id, checkout_id: checkout_token, amount: 42_499, order_id: order.id, provider_id: provider_id }) }
 
       before do
         allow_any_instance_of(Affirm::Client).to receive(:read_transaction).with(checkout_token).and_return(affirm_checkout_response)
@@ -76,7 +79,7 @@ RSpec.describe Spree::AffirmV2::CallbackController do
           order_id: order.id,
           use_route: :spree
         }
-        expect(order.payments.last.amount).to eql 424.99
+        expect(order.payments.last.amount).to eq BigDecimal("424.99")
       end
 
       it "creates a SolidusAffirmV2::Transaction" do
@@ -115,3 +118,5 @@ RSpec.describe Spree::AffirmV2::CallbackController do
     end
   end
 end
+# rubocop:enable RSpec/AnyInstance
+# rubocop:enable Layout/LineLength
