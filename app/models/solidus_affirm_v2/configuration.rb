@@ -2,6 +2,7 @@
 
 module SolidusAffirmV2
   class Configuration < Spree::Preferences::Configuration
+    attr_writer :callback_controller_name, :callback_hook, :checkout_payload_serializer, :exchange_lease_enabled
 
     # Allows implementing custom controller for handling the confirming
     #  and canceling callbacks from Affirm.
@@ -9,7 +10,6 @@ module SolidusAffirmV2
     # @see Spree::AffirmV2::CallbackController
     # @return [String] The controller name used in the routes file.
     #   The standard controller is the 'affirm' controller
-    attr_writer :callback_controller_name
     def callback_controller_name
       @callback_controller_name ||= "callback"
     end
@@ -20,7 +20,6 @@ module SolidusAffirmV2
     # @see SolidusAffirmV2::CallbackHook::Base
     # @return [Class] an object that conforms to the API of
     #   the standard callback hook class SolidusAffirmV2::CallbackHook::Base.
-    attr_writer :callback_hook
     def callback_hook
       @callback_hook ||= SolidusAffirmV2::CallbackHook::Base
     end
@@ -30,12 +29,10 @@ module SolidusAffirmV2
     # @see SolidusAffirmV2::CheckoutPayloadSerializer
     # @return [Class] The serializer class that will be used for serializing
     #  the +SolidusAffirmV2::CheckoutPayload+ object.
-    attr_writer :checkout_payload_serializer
     def checkout_payload_serializer
       @checkout_payload_serializer ||= SolidusAffirmV2::CheckoutPayloadSerializer
     end
 
-    attr_writer :exchange_lease_enabled
     def exchange_lease_enabled
       @exchange_lease_enabled ||= false
     end

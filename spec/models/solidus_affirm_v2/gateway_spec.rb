@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/AnyInstance
+# rubocop:disable Layout/LineLength
+
 require 'spec_helper'
 
 RSpec.describe SolidusAffirmV2::Gateway do
+  subject(:gateway) do
+    described_class.new(gateway_options)
+  end
+
   let(:gateway_options) do
     {
       public_api_key: "PUBLIC_API_KEY",
@@ -19,16 +26,19 @@ RSpec.describe SolidusAffirmV2::Gateway do
     Affirm::Struct::Transaction::Event.new({})
   end
 
-  subject do
-    SolidusAffirmV2::Gateway.new(gateway_options)
-  end
-
   describe "initialize" do
-    it "will setup Affirm::Client config" do
-      subject
+    before { gateway }
+
+    it "will set the public_api_key in Affirm config" do
       expect(Affirm.config.public_api_key).to eql "PUBLIC_API_KEY"
+    end
+
+    it "will set the private_api_key in Affirm config" do
       expect(Affirm.config.private_api_key).to eql "PRIVATE_API_KEY"
-      expect(Affirm.config.environment).to eql :sandbox
+    end
+
+    it "will set the config environment to sandbox" do
+      expect(Affirm.config.environment).to be :sandbox
     end
   end
 
@@ -41,8 +51,8 @@ RSpec.describe SolidusAffirmV2::Gateway do
     end
 
     context "with valid data" do
-      it "will returna successfull ActiveMerchant::Response" do
-        expect(am_response.success?).to be_truthy
+      it "will return successfull ActiveMerchant::Response" do
+        expect(am_response).to be_success
       end
 
       it "will set the Affirm transaction_id" do
@@ -60,7 +70,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
       end
 
       it "will return an unsuccesfull ActiveMerchant::Response" do
-        expect(am_response.success?).to be_falsy
+        expect(am_response).not_to be_success
       end
 
       it "will return the error message from Affirm in the response" do
@@ -77,7 +87,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
     end
 
     it "will capture the affirm payment with the transaction_id" do
-      expect(am_response.success?).to be_truthy
+      expect(am_response).to be_success
     end
 
     context "with invalid data" do
@@ -86,7 +96,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
       end
 
       it "will return an unsuccesfull response" do
-        expect(am_response.success?).to be_falsy
+        expect(am_response).not_to be_success
       end
 
       it "will return the error message from Affirm in the response" do
@@ -98,28 +108,27 @@ RSpec.describe SolidusAffirmV2::Gateway do
   describe "#void" do
     let(:am_response) { subject.void(transaction_id, nil) }
 
-    context "on an authorized payment" do
+    context "with an authorized payment" do
       before do
         allow_any_instance_of(::Affirm::Client).to receive(:void).with(transaction_id).and_return(affirm_transaction_event_response)
       end
 
       it "will void the payment in Affirm" do
-        expect(am_response.success?).to be_truthy
         expect(am_response.message).to eql "Transaction Voided"
       end
     end
 
-    context "on a captured payment" do
+    context "with a captured payment" do
       before do
         allow_any_instance_of(::Affirm::Client).to receive(:void).with(transaction_id).and_raise(Affirm::RequestError.new("The transaction has already been captured."))
       end
 
       it "will return an unsuccesfull response" do
-        expect(am_response.success?).to be_falsy
+        expect(am_response).not_to be_success
       end
 
       it "will return the error message from Affirm in the response" do
-        expect(am_response.message).to eql ("The transaction has already been captured.")
+        expect(am_response.message).to eql "The transaction has already been captured."
       end
     end
   end
@@ -128,24 +137,23 @@ RSpec.describe SolidusAffirmV2::Gateway do
     let(:am_response) { subject.credit(money, transaction_id, nil) }
     let(:money) { 1000 }
 
-    context "on an captured payment" do
+    context "with an captured payment" do
       before do
         allow_any_instance_of(::Affirm::Client).to receive(:refund).with(transaction_id, money).and_return(affirm_transaction_event_response)
       end
 
       it "will refund a part or the whole payment amount" do
-        expect(am_response.success?).to be_truthy
         expect(am_response.message).to eql "Transaction Credited with #{money}"
       end
     end
 
-    context "on an already voided payment" do
+    context "with an already voided payment" do
       before do
         allow_any_instance_of(::Affirm::Client).to receive(:refund).with(transaction_id, money).and_raise(Affirm::RequestError.new("The transaction has been voided and cannot be refunded."))
       end
 
       it "will return an unsuccesfull response" do
-        expect(am_response.success?).to be_falsy
+        expect(am_response).not_to be_success
       end
 
       it "will return the error message from Affirm in the response" do
@@ -154,3 +162,6 @@ RSpec.describe SolidusAffirmV2::Gateway do
     end
   end
 end
+
+# rubocop:enable RSpec/AnyInstance
+# rubocop:enable Layout/LineLength

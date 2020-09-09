@@ -19,7 +19,7 @@ module Spree
         end
 
         affirm_transaction_object = payment_method.gateway.get_transaction(checkout_token)
-        
+
         affirm_source_transaction = SolidusAffirmV2::Transaction.new(
           transaction_id: affirm_transaction_object.id,
           checkout_token: affirm_transaction_object.checkout_id,
@@ -28,12 +28,13 @@ module Spree
 
         affirm_source_transaction.transaction do
           if affirm_source_transaction.save!
-            payment = order.payments.create!({
-              payment_method_id: affirm_params[:payment_method_id],
-              source: affirm_source_transaction,
-              amount: affirm_transaction_object.amount / 100.0
-            })
-            
+            order.payments.create!(
+              {
+                payment_method_id: affirm_params[:payment_method_id],
+                source: affirm_source_transaction,
+                amount: affirm_transaction_object.amount / 100.0
+              }
+            )
             order.next! unless order.state == 'confirm'
             redirect_to checkout_state_path(order.state)
           end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe "payment/affirm_v2" do
+RSpec.describe "payment/affirm_v2" do # rubocop:disable RSpec/DescribeClass
   let(:payment_method) { create(:affirm_v2_payment_method) }
   let(:address) { create(:address, firstname: "John's", lastname: "D'o", zipcode: "58451") }
   let(:order) { create(:order_with_totals, shipping_address: address) }
@@ -14,8 +14,7 @@ RSpec.describe "payment/affirm_v2" do
     render partial: "spree/checkout/payment/affirm_v2"
     rendered_partial = Nokogiri::HTML.fragment(rendered)
     affirm_data_attribute = rendered_partial.css('div#affirm_v2_checkout_payload')[0]["data-affirm"]
-    expect(affirm_data_attribute).to be_present
     json = JSON.parse(affirm_data_attribute)
-    expect(json["shipping"]["name"]).to eql({"first"=>"John's", "last"=>"D'o"})
+    expect(json["shipping"]["name"]).to eql({ "first" => "John's", "last" => "D'o" })
   end
 end

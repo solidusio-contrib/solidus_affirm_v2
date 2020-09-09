@@ -21,6 +21,8 @@ module SolidusAffirmV2
   class CheckoutPayload < ActiveModelSerializers::Model
     attr_reader :order, :config, :metadata
 
+    delegate :ship_address, :bill_address, to: :order
+
     # @param order [Spree::Order]
     # @param config [Hash]
     # @option config [String] :user_confirmation_url The redirect url for succesful Affirm checkout
@@ -31,14 +33,6 @@ module SolidusAffirmV2
       @order = order
       @config = config
       @metadata = metadata
-    end
-
-    def ship_address
-      order.ship_address
-    end
-
-    def bill_address
-      order.bill_address
     end
 
     def items

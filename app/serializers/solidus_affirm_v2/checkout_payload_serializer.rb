@@ -4,8 +4,10 @@ require 'active_model_serializers'
 
 module SolidusAffirmV2
   class CheckoutPayloadSerializer < ActiveModel::Serializer
-    attributes :merchant, :shipping, :billing, :items, :discounts, :metadata,
-    :order_id, :shipping_amount, :tax_amount, :total
+    # rubocop:disable Layout/ArgumentAlignment
+    attributes  :merchant, :shipping, :billing, :items, :discounts, :metadata,
+                :order_id, :shipping_amount, :tax_amount, :total
+    # rubocop:enable Layout/ArgumentAlignment
 
     def merchant
       hsh = {
@@ -35,14 +37,14 @@ module SolidusAffirmV2
 
     def discounts
       promo_total = object.order.promo_total
-      if promo_total > 0
-        {
-          promotion_total: {
-            discount_amount: promo_total.to_money.cents,
-            discount_display_name: "Total promotion discount"
-          }
+      return unless promo_total > 0
+
+      {
+        promotion_total: {
+          discount_amount: promo_total.to_money.cents,
+          discount_display_name: "Total promotion discount"
         }
-      end
+      }
     end
 
     def order_id
