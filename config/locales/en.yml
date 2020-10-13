@@ -2,3 +2,7 @@ en:
   activerecord:
     models:
       solidus_affirm_v2/payment_method: Affirm V2
+  spree:
+    hints:
+      spree/product:
+        leasable: When enabled this product will be able to be lease to own with Katapult
