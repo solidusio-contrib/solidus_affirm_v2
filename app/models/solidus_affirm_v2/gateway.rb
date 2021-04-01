@@ -13,7 +13,7 @@ module SolidusAffirmV2
     end
 
     def authorize(_money, affirm_source, _options = {})
-      response = ::Affirm::Client.new.authorize(affirm_source.transaction_id)
+      response = ::Affirm::Client.new.authorize(affirm_source.checkout_token)
       ActiveMerchant::Billing::Response.new(true, "Transaction Approved", {}, authorization: response.id)
     rescue Affirm::Error => e
       ActiveMerchant::Billing::Response.new(false, e.message)
