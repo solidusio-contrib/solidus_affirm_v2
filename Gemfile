@@ -25,6 +25,7 @@ gem "rails", rails_requirement_string
 
 # Provides basic authentication functionality for testing parts of your engine
 gem "solidus_auth_devise"
+gem "state_machines", "~> 0.6.0"
 
 case ENV["DB"]
 when "mysql"
