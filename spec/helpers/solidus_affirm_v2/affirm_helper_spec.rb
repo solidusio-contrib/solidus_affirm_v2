@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe SolidusAffirmV2::AffirmHelper do
   describe "#affirm_js_setup" do

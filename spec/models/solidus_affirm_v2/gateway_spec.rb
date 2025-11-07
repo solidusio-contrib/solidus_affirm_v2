@@ -3,7 +3,7 @@
 # rubocop:disable RSpec/AnyInstance
 # rubocop:disable Layout/LineLength
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe SolidusAffirmV2::Gateway do
   subject(:gateway) do
@@ -43,7 +43,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
   end
 
   describe "#authorize" do
-    let(:affirm_transaction_response) { Affirm::Struct::Transaction.new({ id: transaction_id, provider_id: 2 }) }
+    let(:affirm_transaction_response) { Affirm::Struct::Transaction.new({id: transaction_id, provider_id: 2}) }
     let(:am_response) { subject.authorize(nil, affirm_v2_transaction) }
 
     before do

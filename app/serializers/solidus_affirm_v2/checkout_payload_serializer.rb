@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'active_model_serializers'
+require "active_model_serializers"
 
 module SolidusAffirmV2
   class CheckoutPayloadSerializer < ActiveModel::Serializer
     # rubocop:disable Layout/ArgumentAlignment
-    attributes  :merchant, :shipping, :billing, :items, :discounts, :metadata,
+    attributes :merchant, :shipping, :billing, :items, :discounts, :metadata,
                 :order_id, :shipping_amount, :tax_amount, :total
     # rubocop:enable Layout/ArgumentAlignment
 

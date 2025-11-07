@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'spree/core'
-require 'solidus_affirm_v2'
+require "spree/core"
+require "solidus_affirm_v2"
 
 module SolidusAffirmV2
   class Engine < Rails::Engine
@@ -9,7 +9,7 @@ module SolidusAffirmV2
 
     isolate_namespace ::Spree
 
-    engine_name 'solidus_affirm_v2'
+    engine_name "solidus_affirm_v2"
 
     # use rspec for tests
     config.generators do |g|
@@ -26,7 +26,7 @@ module SolidusAffirmV2
       end
     end
 
-    initializer 'register_solidus_affirm_v2_helper_action_controller' do |_app|
+    initializer "register_solidus_affirm_v2_helper_action_controller" do |_app|
       ActiveSupport.on_load :action_controller do |klass|
         next if klass.name == "ActionController::API"
 

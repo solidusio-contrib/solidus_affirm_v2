@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe SolidusAffirmV2::AddressSerializer do
   subject(:serialized_address_json) { JSON.parse(serializer.to_json) }
@@ -10,7 +10,7 @@ RSpec.describe SolidusAffirmV2::AddressSerializer do
 
   describe "name" do
     it "will be a composition with first -and lastname" do
-      name_json = { "first" => "John", "last" => "Do" }
+      name_json = {"first" => "John", "last" => "Do"}
       expect(serialized_address_json["name"]).to eql name_json
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe SolidusAffirmV2::AddressSerializer do
     let(:address) { create(:address, name: "John's D'o", zipcode: "58451") }
 
     it "will serialize correctly" do
-      name_json = { "first" => "John's", "last" => "D'o" }
+      name_json = {"first" => "John's", "last" => "D'o"}
       expect(serialized_address_json["name"]).to eql name_json
     end
   end

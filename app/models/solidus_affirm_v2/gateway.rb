@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'affirm'
+require "affirm"
 
 module SolidusAffirmV2
   class Gateway
     def initialize(options)
       ::Affirm.configure do |config|
-        config.public_api_key  = options[:public_api_key]
+        config.public_api_key = options[:public_api_key]
         config.private_api_key = options[:private_api_key]
-        config.environment     = options[:test_mode] ? :sandbox : :production
+        config.environment = options[:test_mode] ? :sandbox : :production
       end
     end
 

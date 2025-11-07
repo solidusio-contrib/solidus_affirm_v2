@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe SolidusAffirmV2::LineItemSerializer do
   subject(:serialized_line_item_json) { JSON.parse(serializer.to_json) }
 
-  let(:line_item) { create(:line_item, price: BigDecimal('14.99')) }
+  let(:line_item) { create(:line_item, price: BigDecimal("14.99")) }
   let(:serializer) { described_class.new(line_item, root: false) }
 
-  describe 'display_name' do
+  describe "display_name" do
     it "return the line_item variant name" do
       expect(serialized_line_item_json["display_name"]).to eql line_item.name
     end
@@ -28,10 +28,9 @@ RSpec.describe SolidusAffirmV2::LineItemSerializer do
 
   describe "item_image_url" do
     context "with variant specific image" do
-
       it "will return the variant image url" do
         expect(line_item.variant).to receive(:images).and_return([create(:image)]).twice
-        expect(subject['item_image_url']).to match /(blank|thinking-cat).jpg/
+        expect(subject["item_image_url"]).to match(/(blank|thinking-cat).jpg/)
       end
     end
 
@@ -40,7 +39,7 @@ RSpec.describe SolidusAffirmV2::LineItemSerializer do
 
       it "will return the master product image url" do
         expect(line_item.variant.product).to receive(:images).and_return([create(:image)]).twice
-        expect(subject['item_image_url']).to match /(blank|thinking-cat).jpg/
+        expect(subject["item_image_url"]).to match(/(blank|thinking-cat).jpg/)
       end
     end
   end

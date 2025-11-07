@@ -17,7 +17,7 @@ module SolidusAffirmV2
     end
 
     def partial_name
-      'affirm_v2'
+      "affirm_v2"
     end
 
     def supports?(source)
