@@ -24,7 +24,7 @@ RSpec.configure do |config|
 
   if defined?(ActiveStorage::Current)
     config.before(:all) do
-      ActiveStorage::Current.host = 'https://www.example.com'
+      ActiveStorage::Current.url_options = { host: 'https://www.example.com' }
     end
   end
 end
