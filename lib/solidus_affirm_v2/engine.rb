@@ -21,7 +21,9 @@ module SolidusAffirmV2
     end
 
     initializer "register_solidus_affirm_v2_configuration", before: :load_config_initializers do |_app|
-      SolidusAffirmV2::Config = SolidusAffirmV2::Configuration.new
+      Rails.application.config.to_prepare do
+        SolidusAffirmV2::Config = SolidusAffirmV2::Configuration.new
+      end
     end
 
     initializer 'register_solidus_affirm_v2_helper_action_controller' do |_app|
