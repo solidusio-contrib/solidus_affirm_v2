@@ -27,7 +27,7 @@ RSpec.describe SolidusAffirmV2::AffirmHelper do
   describe "#affirm_payload_json" do
     before { allow(SolidusAffirmV2::Config.checkout_payload_serializer).to receive(:new) }
 
-    let(:shipping_address) { create(:ship_address, firstname: "John's", lastname: "Do", zipcode: "52106-9133") }
+    let(:shipping_address) { create(:ship_address, name: "John's Do", zipcode: "52106-9133") }
     let(:order) do
       create(:order_with_line_items, ship_address: shipping_address)
     end

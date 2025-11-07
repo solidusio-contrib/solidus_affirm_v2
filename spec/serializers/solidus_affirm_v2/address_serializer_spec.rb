@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe SolidusAffirmV2::AddressSerializer do
   subject(:serialized_address_json) { JSON.parse(serializer.to_json) }
 
-  let(:address) { create(:address, firstname: "John", lastname: "Do", zipcode: "58451") }
+  let(:address) { create(:address, name: "John Do", zipcode: "58451") }
   let(:serializer) { described_class.new(address, root: false) }
 
   describe "name" do
@@ -30,7 +30,7 @@ RSpec.describe SolidusAffirmV2::AddressSerializer do
   end
 
   context "with apostrophes in first or lastname" do
-    let(:address) { create(:address, firstname: "John's", lastname: "D'o", zipcode: "58451") }
+    let(:address) { create(:address, name: "John's D'o", zipcode: "58451") }
 
     it "will serialize correctly" do
       name_json = { "first" => "John's", "last" => "D'o" }

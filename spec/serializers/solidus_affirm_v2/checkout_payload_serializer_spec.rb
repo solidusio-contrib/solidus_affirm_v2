@@ -13,8 +13,8 @@ RSpec.describe SolidusAffirmV2::CheckoutPayloadSerializer do
       { product: create(:product, name: 'amazing stuff', sku: "P2") }
     ]
   end
-  let(:shipping_address) { create(:ship_address, firstname: "John", lastname: "Do", zipcode: "52106-9133") }
-  let(:billing_address) { create(:bill_address, firstname: "John", lastname: "Do", zipcode: "58451") }
+  let(:shipping_address) { create(:ship_address, name: "John Do", zipcode: "52106-9133") }
+  let(:billing_address) { create(:bill_address, name: "John Do", zipcode: "58451") }
 
   let(:order) do
     create(:order_with_line_items,
@@ -185,7 +185,7 @@ RSpec.describe SolidusAffirmV2::CheckoutPayloadSerializer do
   end
 
   context 'with apostrophes in name' do
-    let(:shipping_address) { create(:ship_address, firstname: "John's", lastname: "Do", zipcode: "52106-9133") }
+    let(:shipping_address) { create(:ship_address, name: "John's Do", zipcode: "52106-9133") }
 
     it "renders a valid JSON" do
       shipping_name_json = { "first" => "John's", "last" => "Do" }
