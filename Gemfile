@@ -20,7 +20,8 @@ end
 # Needed to help Bundler figure out how to resolve dependencies,
 # otherwise it takes forever to resolve them.
 # See https://github.com/bundler/bundler/issues/6677
-gem 'rails', '~> 6.0'
+rails_requirement_string = ENV.fetch("RAILS_VERSION", "~> 8.0")
+gem "rails", rails_requirement_string
 
 # Provides basic authentication functionality for testing parts of your engine
 gem 'solidus_auth_devise'
