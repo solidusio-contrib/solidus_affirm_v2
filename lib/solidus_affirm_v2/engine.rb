@@ -17,7 +17,7 @@ module SolidusAffirmV2
     end
 
     initializer "register_solidus_affirm_v2_payment_method", after: "spree.register.payment_methods" do |app|
-      app.config.spree.payment_methods << SolidusAffirmV2::PaymentMethod
+      app.config.spree.payment_methods << "SolidusAffirmV2::PaymentMethod"
     end
 
     initializer "register_solidus_affirm_v2_configuration", before: :load_config_initializers do |_app|
