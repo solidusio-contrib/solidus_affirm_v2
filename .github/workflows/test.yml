@@ -32,6 +32,9 @@ jobs:
           - "postgresql"
           - "mysql"
           - "sqlite"
+        exclude:
+          - rails-version: "8.0"
+            solidus-branch: "v4.4"
     steps:
       - uses: actions/checkout@v4
       - name: Run extension tests
