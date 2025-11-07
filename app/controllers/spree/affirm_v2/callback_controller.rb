@@ -35,7 +35,7 @@ module Spree
                 amount: affirm_transaction_object.amount / 100.0
               }
             )
-            order.next! unless order.state == 'confirm'
+            order.next! unless order.state == "confirm"
             redirect_to checkout_state_path(order.state)
           end
         end

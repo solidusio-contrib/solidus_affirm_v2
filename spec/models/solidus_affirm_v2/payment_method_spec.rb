@@ -19,7 +19,7 @@ RSpec.describe SolidusAffirmV2::PaymentMethod do
 
   describe "partial_name" do
     it "returns affirm_v2" do
-      expect(payment_method.partial_name).to eql 'affirm_v2'
+      expect(payment_method.partial_name).to eql "affirm_v2"
     end
   end
 

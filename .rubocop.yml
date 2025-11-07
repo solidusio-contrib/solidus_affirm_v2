@@ -1,5 +1,5 @@
 require:
-  - solidus_dev_support/rubocop
+  - standard
 
-RSpec/MultipleMemoizedHelpers:
-  Enabled: false
+inherit_gem:
+  standard: config/base.yml

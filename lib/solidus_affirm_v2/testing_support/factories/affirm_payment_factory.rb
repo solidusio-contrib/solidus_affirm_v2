@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :affirm_v2_payment, class: Spree::Payment do
-    source_type { 'SolidusAffirmV2::Transaction' }
-    state { 'checkout' }
+    source_type { "SolidusAffirmV2::Transaction" }
+    state { "checkout" }
   end
 
   factory :captured_affirm_v2_payment, class: Spree::Payment do
