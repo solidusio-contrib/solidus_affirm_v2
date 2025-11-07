@@ -67,7 +67,7 @@ variables you can create the following static configuration:
 Spree.config do |config|
   # ...
   config.static_model_preferences.add(
-    SolidusAffirmV2::PaymentMethod,
+    "SolidusAffirmV2::PaymentMethod",
     'affirm_env_credentials',
     public_api_key: ENV['AFFIRM_PUBLIC_KEY'],
     private_api_key: ENV['AFFIRM_PRIVATE_KEY'],
