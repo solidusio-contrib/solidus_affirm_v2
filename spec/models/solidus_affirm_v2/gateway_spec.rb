@@ -45,7 +45,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
     before do
       allow_any_instance_of(::Affirm::Client)
         .to receive(:authorize)
-        .with(affirm_v2_transaction.transaction_id)
+        .with(checkout_token)
         .and_return(affirm_transaction_response)
     end
 
@@ -65,7 +65,10 @@ RSpec.describe SolidusAffirmV2::Gateway do
 
     context "with invalid data" do
       before do
-        allow_any_instance_of(::Affirm::Client).to receive(:authorize).and_raise(Affirm::RequestError, "The transaction has already been authorized.")
+        allow_any_instance_of(::Affirm::Client)
+          .to receive(:authorize)
+          .with(checkout_token)
+          .and_raise(Affirm::RequestError, "The transaction has already been authorized.")
       end
 
       it "returns an unsuccesfull ActiveMerchant::Response" do

@@ -12,11 +12,11 @@ RSpec.describe Spree::AffirmV2::CallbackController do
     context "when the order_id is not valid" do
       let(:params) {
         {
-            checkout_token: checkout_token,
-            payment_method_id: payment_method.id,
-            order_id: nil,
-            use_route: :spree
-          }
+          checkout_token: checkout_token,
+          payment_method_id: payment_method.id,
+          order_id: nil,
+          use_route: :spree
+        }
       }
 
       it "raises an AR RecordNotFound" do
@@ -62,12 +62,24 @@ RSpec.describe Spree::AffirmV2::CallbackController do
       let(:order) { create(:order_with_totals, state: "payment") }
       let(:affirm_payment_source) { create(:affirm_v2_transaction) }
       let(:checkout_token) { "TKLKJ71GOP9YSASU" }
-      let(:transaction_id) { "N330-Z6D4" }
       let(:provider_id) { 1 }
-      let!(:affirm_checkout_response) { Affirm::Struct::Transaction.new({id: transaction_id, checkout_id: checkout_token, amount: 42_499, order_id: order.id, provider_id: provider_id}) }
+      let!(:affirm_checkout_response) {
+        Affirm::Struct::Checkout.new({total: 42499})
+      }
+      let(:params) {
+        {
+          checkout_token: checkout_token,
+          payment_method_id: payment_method.id,
+          order_id: order.id,
+          use_route: :spree
+        }
+      }
 
       before do
-        allow_any_instance_of(Affirm::Client).to receive(:read_transaction).with(checkout_token).and_return(affirm_checkout_response)
+        allow_any_instance_of(Affirm::Client)
+          .to receive(:get_checkout)
+          .with(checkout_token)
+          .and_return(affirm_checkout_response)
       end
 
       it "creates a payment" do
@@ -96,11 +108,11 @@ RSpec.describe Spree::AffirmV2::CallbackController do
 
   describe "GET cancel" do
     subject {
-        get "/affirm_v2/cancel", params: {
-          payment_method_id: payment_method.id,
-          order_id: order.id,
-          use_route: :spree
-        }
+      get "/affirm_v2/cancel", params: {
+        payment_method_id: payment_method.id,
+        order_id: order.id,
+        use_route: :spree
+      }
     }
 
     context "with an order_id present" do

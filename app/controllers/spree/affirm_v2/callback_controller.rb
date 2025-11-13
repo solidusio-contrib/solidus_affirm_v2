@@ -18,12 +18,10 @@ module Spree
           return redirect_to spree.order_path(order), notice: "Order is already in complete state"
         end
 
-        affirm_transaction_object = payment_method.gateway.get_transaction(checkout_token)
+        affirm_checkout_object = payment_method.gateway.get_checkout(checkout_token)
 
         affirm_source_transaction = SolidusAffirmV2::Transaction.new(
-          transaction_id: affirm_transaction_object.id,
-          checkout_token: affirm_transaction_object.checkout_id,
-          provider: affirm_transaction_object.provider
+          checkout_token: checkout_token
         )
 
         affirm_source_transaction.transaction do
@@ -32,7 +30,7 @@ module Spree
               {
                 payment_method_id: affirm_params[:payment_method_id],
                 source: affirm_source_transaction,
-                amount: affirm_transaction_object.amount / 100.0
+                amount: affirm_checkout_object.total / 100.0
               }
             )
             order.next! unless order.state == "confirm"
