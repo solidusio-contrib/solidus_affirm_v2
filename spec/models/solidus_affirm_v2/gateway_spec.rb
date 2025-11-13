@@ -15,7 +15,6 @@ RSpec.describe SolidusAffirmV2::Gateway do
   }
   let(:checkout_token) { "TKLKJ71GOP9YSASU" }
   let(:transaction_id) { "N330-Z6D4" }
-  let(:affirm_v2_transaction) { create(:affirm_v2_transaction, checkout_token: checkout_token) }
 
   let(:affirm_transaction_event_response) do
     Affirm::Struct::Transaction::Event.new({})
@@ -41,6 +40,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
     subject { gateway.authorize(nil, affirm_v2_transaction) }
 
     let(:affirm_transaction_response) { Affirm::Struct::Transaction.new({id: transaction_id, provider_id: 2}) }
+    let(:affirm_v2_transaction) { create(:affirm_v2_transaction, transaction_id: nil, checkout_token:) }
 
     before do
       allow_any_instance_of(::Affirm::Client)
@@ -60,6 +60,12 @@ RSpec.describe SolidusAffirmV2::Gateway do
 
       it "returns a 'Transaction Approved' message" do
         expect(subject.message).to eql "Transaction Approved"
+      end
+
+      it "updates the transaction id on the transaction" do
+        expect { subject }
+          .to change { affirm_v2_transaction.reload.transaction_id }
+          .from(nil).to(transaction_id)
       end
     end
 
