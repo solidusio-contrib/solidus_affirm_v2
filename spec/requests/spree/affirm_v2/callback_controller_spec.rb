@@ -1,9 +1,6 @@
 require "spec_helper"
 require "affirm"
 
-# rubocop:disable RSpec/AnyInstance
-# rubocop:disable Layout/LineLength
-
 RSpec.describe Spree::AffirmV2::CallbackController do
   let(:order) { create(:order_with_totals) }
   let(:checkout_token) { "FOOBAR123" }
@@ -118,5 +115,3 @@ RSpec.describe Spree::AffirmV2::CallbackController do
     end
   end
 end
-# rubocop:enable RSpec/AnyInstance
-# rubocop:enable Layout/LineLength

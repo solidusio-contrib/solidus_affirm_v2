@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = "info@peterberkenbosch.nl"
 
   spec.summary = "Solidus extension for using Affirm financing payments in your store"
-  spec.description = "Solidus extenstion that integrates your store with Affirm financing payments using the new Transaction API" # rubocop:disable Layout/LineLength
+  spec.description = "Solidus extenstion that integrates your store with Affirm financing payments using the new Transaction API"
   spec.homepage = "https://github.com/solidusio-contrib/solidus_affirm_v2"
   spec.license = "BSD-3-Clause"
 

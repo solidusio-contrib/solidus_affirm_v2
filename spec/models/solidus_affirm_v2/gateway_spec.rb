@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable RSpec/AnyInstance
-# rubocop:disable Layout/LineLength
-
 require "spec_helper"
 
 RSpec.describe SolidusAffirmV2::Gateway do
@@ -183,6 +180,3 @@ RSpec.describe SolidusAffirmV2::Gateway do
     end
   end
 end
-
-# rubocop:enable RSpec/AnyInstance
-# rubocop:enable Layout/LineLength

@@ -11,8 +11,8 @@ module SolidusAffirmV2
       end
 
       def add_stylesheets
-        inject_into_file "vendor/assets/stylesheets/spree/frontend/all.css", " *= require spree/frontend/solidus_affirm_v2\n", before: %r{\*/}, verbose: true # rubocop:disable Layout/LineLength
-        inject_into_file "vendor/assets/stylesheets/spree/backend/all.css", " *= require spree/backend/solidus_affirm_v2\n", before: %r{\*/}, verbose: true # rubocop:disable Layout/LineLength
+        inject_into_file "vendor/assets/stylesheets/spree/frontend/all.css", " *= require spree/frontend/solidus_affirm_v2\n", before: %r{\*/}, verbose: true
+        inject_into_file "vendor/assets/stylesheets/spree/backend/all.css", " *= require spree/backend/solidus_affirm_v2\n", before: %r{\*/}, verbose: true
       end
 
       def add_migrations
@@ -20,11 +20,11 @@ module SolidusAffirmV2
       end
 
       def run_migrations
-        run_migrations = options[:auto_run_migrations] || ["", "y", "Y"].include?(ask("Would you like to run the migrations now? [Y/n]")) # rubocop:disable Layout/LineLength
+        run_migrations = options[:auto_run_migrations] || ["", "y", "Y"].include?(ask("Would you like to run the migrations now? [Y/n]"))
         if run_migrations
           run "bin/rails db:migrate"
         else
-          puts "Skipping bin/rails db:migrate, don't forget to run it!" # rubocop:disable Rails/Output
+          puts "Skipping bin/rails db:migrate, don't forget to run it!"
         end
       end
     end
