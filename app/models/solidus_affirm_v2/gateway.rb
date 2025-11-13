@@ -62,8 +62,8 @@ module SolidusAffirmV2
       end
     end
 
-    def get_transaction(checkout_token)
-      ::Affirm::Client.new.read_transaction(checkout_token)
+    def get_transaction(transaction_id)
+      ::Affirm::Client.new.read_transaction(transaction_id)
     end
   end
 end
