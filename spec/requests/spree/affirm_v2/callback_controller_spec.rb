@@ -7,41 +7,53 @@ RSpec.describe Spree::AffirmV2::CallbackController do
   let(:payment_method) { create(:affirm_v2_payment_method) }
 
   describe "POST confirm" do
+    subject { post "/affirm_v2/confirm", params: }
+
     context "when the order_id is not valid" do
-      it "will raise an AR RecordNotFound" do
-        expect {
-          post "/affirm_v2/confirm", params: {
+      let(:params) {
+        {
             checkout_token: checkout_token,
             payment_method_id: payment_method.id,
             order_id: nil,
             use_route: :spree
           }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      }
+
+      it "raises an AR RecordNotFound" do
+        expect { subject }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
     context "when the checkout_token is missing" do
-      it "will redirect to the order current checkout state path" do
-        post "/affirm_v2/confirm", params: {
+      let(:params) {
+        {
           checkout_token: nil,
           payment_method_id: payment_method.id,
           order_id: order.id,
           use_route: :spree
         }
+      }
+
+      it "redirects to the order current checkout state path" do
+        subject
         expect(response).to redirect_to("/checkout/cart")
       end
     end
 
     context "when the order is already completed" do
       let(:order) { create(:completed_order_with_totals) }
-
-      it "will redirect to the order detail page" do
-        post "/affirm_v2/confirm", params: {
+      let(:params) {
+        {
           checkout_token: checkout_token,
           payment_method_id: payment_method.id,
           order_id: order.id,
           use_route: :spree
         }
+      }
+
+      it "redirects to the order detail page" do
+        subject
         expect(response).to redirect_to("/orders/#{order.number}")
       end
     end
@@ -60,56 +72,40 @@ RSpec.describe Spree::AffirmV2::CallbackController do
 
       it "creates a payment" do
         expect {
-          post "/affirm_v2/confirm", params: {
-            checkout_token: checkout_token,
-            payment_method_id: payment_method.id,
-            order_id: order.id,
-            use_route: :spree
-          }
+          subject
         }.to change { order.payments.count }.from(0).to(1)
       end
 
       it "creates a payment with the right amount" do
-        post "/affirm_v2/confirm", params: {
-          checkout_token: checkout_token,
-          payment_method_id: payment_method.id,
-          order_id: order.id,
-          use_route: :spree
-        }
+        subject
         expect(order.payments.last.amount).to eq BigDecimal("424.99")
       end
 
       it "creates a SolidusAffirmV2::Transaction" do
         expect {
-          post "/affirm_v2/confirm", params: {
-            checkout_token: checkout_token,
-            payment_method_id: payment_method.id,
-            order_id: order.id,
-            use_route: :spree
-          }
+          subject
         }.to change { SolidusAffirmV2::Transaction.count }.by(1)
       end
 
       it "redirect to the confirm page" do
-        post "/affirm_v2/confirm", params: {
-          checkout_token: checkout_token,
-          payment_method_id: payment_method.id,
-          order_id: order.id,
-          use_route: :spree
-        }
+        subject
         expect(response).to redirect_to("/checkout/confirm")
       end
     end
   end
 
   describe "GET cancel" do
-    context "with an order_id present" do
-      it "will redirect to the current order checkout state" do
+    subject {
         get "/affirm_v2/cancel", params: {
           payment_method_id: payment_method.id,
           order_id: order.id,
           use_route: :spree
         }
+    }
+
+    context "with an order_id present" do
+      it "redirects to the current order checkout state" do
+        subject
         expect(response).to redirect_to("/checkout/cart")
       end
     end
