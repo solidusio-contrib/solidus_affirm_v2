@@ -17,7 +17,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
   let(:transaction_id) { "N330-Z6D4" }
 
   let(:affirm_transaction_event_response) do
-    Affirm::Struct::Transaction::Event.new({})
+    Affirm::Struct::Transaction::Event.new(id: transaction_id)
   end
 
   describe "initialize" do
@@ -168,6 +168,11 @@ RSpec.describe SolidusAffirmV2::Gateway do
 
       it "refunds a part or the whole payment amount" do
         expect(subject.message).to eql "Transaction Credited with #{money}"
+      end
+
+      it "includes the authorization in the return" do
+        expect(subject.authorization)
+          .to eq "N330-Z6D4"
       end
     end
 
