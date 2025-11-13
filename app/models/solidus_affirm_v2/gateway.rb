@@ -26,7 +26,7 @@ module SolidusAffirmV2
 
     def capture(_money, transaction_id, _options = {})
       _response = ::Affirm::Client.new.capture(transaction_id)
-      ActiveMerchant::Billing::Response.new(true, "Transaction Captured")
+      ActiveMerchant::Billing::Response.new(true, "Transaction Captured", authorization: transaction_id)
     rescue Affirm::Error => e
       ActiveMerchant::Billing::Response.new(false, e.message)
     end
