@@ -50,7 +50,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
     end
 
     context "with valid data" do
-      it "returns successfull ActiveMerchant::Response" do
+      it "returns successful ActiveMerchant::Response" do
         expect(subject).to be_success
       end
 
@@ -77,7 +77,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
           .and_raise(Affirm::RequestError, "The transaction has already been authorized.")
       end
 
-      it "returns an unsuccesfull ActiveMerchant::Response" do
+      it "returns an unsuccessful ActiveMerchant::Response" do
         expect(subject).not_to be_success
       end
 
@@ -109,7 +109,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
           .and_raise(Affirm::RequestError.new("The transaction has already been captured."))
       end
 
-      it "returns an unsuccesfull response" do
+      it "returns an unsuccessful response" do
         expect(subject).not_to be_success
       end
 
@@ -143,7 +143,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
           .and_raise(Affirm::RequestError.new("The transaction has already been captured."))
       end
 
-      it "returns an unsuccesfull response" do
+      it "returns an unsuccessful response" do
         expect(subject).not_to be_success
       end
 
@@ -184,7 +184,7 @@ RSpec.describe SolidusAffirmV2::Gateway do
           .and_raise(Affirm::RequestError.new("The transaction has been voided and cannot be refunded."))
       end
 
-      it "returns an unsuccesfull response" do
+      it "returns an unsuccessful response" do
         expect(subject).not_to be_success
       end
 
