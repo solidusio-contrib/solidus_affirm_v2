@@ -7,8 +7,6 @@ This extension uses the [Direct Connect API](https://docs.affirm.com/affirm-deve
 
 **The work done before October 1st 2020 is sponsored by the [Solidus Open Collective fund](https://opencollective.com/solidus)**
 
-[![CircleCI](https://circleci.com/gh/solidusio-contrib/solidus_affirm_v2.svg?style=shield)](https://circleci.com/gh/solidusio-contrib/solidus_affirm_v2)
-
 ## Installation
 
 Add solidus_affirm_v2 to your Gemfile:
