@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe "payment/affirm_v2" do # rubocop:disable RSpec/DescribeClass
+RSpec.describe "payment/affirm_v2" do
   let(:payment_method) { create(:affirm_v2_payment_method) }
   let(:address) { create(:address, name: "John's D'o", zipcode: "58451") }
   let(:order) { create(:order_with_totals, shipping_address: address) }

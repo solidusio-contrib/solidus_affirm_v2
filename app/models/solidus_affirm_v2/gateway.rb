@@ -13,7 +13,12 @@ module SolidusAffirmV2
     end
 
     def authorize(_money, affirm_source, _options = {})
-      response = ::Affirm::Client.new.authorize(affirm_source.transaction_id)
+      response = ::Affirm::Client.new.authorize(affirm_source.checkout_token)
+
+      SolidusAffirmV2::Transaction
+        .find_by(checkout_token: affirm_source.checkout_token)
+        .update(transaction_id: response.id)
+
       ActiveMerchant::Billing::Response.new(true, "Transaction Approved", {}, authorization: response.id)
     rescue Affirm::Error => e
       ActiveMerchant::Billing::Response.new(false, e.message)
@@ -21,7 +26,7 @@ module SolidusAffirmV2
 
     def capture(_money, transaction_id, _options = {})
       _response = ::Affirm::Client.new.capture(transaction_id)
-      ActiveMerchant::Billing::Response.new(true, "Transaction Captured")
+      ActiveMerchant::Billing::Response.new(true, "Transaction Captured", authorization: transaction_id)
     rescue Affirm::Error => e
       ActiveMerchant::Billing::Response.new(false, e.message)
     end
@@ -34,8 +39,8 @@ module SolidusAffirmV2
     end
 
     def credit(money, transaction_id, _options = {})
-      _response = ::Affirm::Client.new.refund(transaction_id, money)
-      ActiveMerchant::Billing::Response.new(true, "Transaction Credited with #{money}")
+      response = ::Affirm::Client.new.refund(transaction_id, money)
+      ActiveMerchant::Billing::Response.new(true, "Transaction Credited with #{money}", {}, authorization: response.id)
     rescue Affirm::Error => e
       ActiveMerchant::Billing::Response.new(false, e.message)
     end
@@ -62,8 +67,12 @@ module SolidusAffirmV2
       end
     end
 
-    def get_transaction(checkout_token)
-      ::Affirm::Client.new.read_transaction(checkout_token)
+    def get_transaction(transaction_id)
+      ::Affirm::Client.new.read_transaction(transaction_id)
+    end
+
+    def get_checkout(checkout_token)
+      ::Affirm::Client.new.get_checkout(checkout_token)
     end
   end
 end

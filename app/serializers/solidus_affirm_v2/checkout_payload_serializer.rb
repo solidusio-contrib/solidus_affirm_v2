@@ -4,10 +4,8 @@ require "active_model_serializers"
 
 module SolidusAffirmV2
   class CheckoutPayloadSerializer < ActiveModel::Serializer
-    # rubocop:disable Layout/ArgumentAlignment
     attributes :merchant, :shipping, :billing, :items, :discounts, :metadata,
-                :order_id, :shipping_amount, :tax_amount, :total
-    # rubocop:enable Layout/ArgumentAlignment
+      :order_id, :shipping_amount, :tax_amount, :total
 
     def merchant
       hsh = {

@@ -155,7 +155,7 @@ RSpec.describe SolidusAffirmV2::CheckoutPayloadSerializer do
       end
 
       it "will set the discount_display_name" do
-        expect(serialized_checkout_payload_json["discounts"]["promotion_total"]["discount_display_name"]).to eql "Total promotion discount" # rubocop:disable Layout/LineLength
+        expect(serialized_checkout_payload_json["discounts"]["promotion_total"]["discount_display_name"]).to eql "Total promotion discount"
       end
     end
   end
