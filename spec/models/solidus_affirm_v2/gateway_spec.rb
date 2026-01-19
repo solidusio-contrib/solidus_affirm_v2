@@ -101,6 +101,11 @@ RSpec.describe SolidusAffirmV2::Gateway do
       expect(subject).to be_success
     end
 
+    it "includes the authorization in the return" do
+      expect(subject.authorization)
+        .to eq "N330-Z6D4"
+    end
+
     context "with invalid data" do
       before do
         allow_any_instance_of(::Affirm::Client)
