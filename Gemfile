@@ -24,7 +24,7 @@ rails_requirement_string = ENV.fetch("RAILS_VERSION", "~> 8.0")
 gem "rails", rails_requirement_string
 
 # Provides basic authentication functionality for testing parts of your engine
-gem "solidus_auth_devise"
+gem "solidus_auth_devise", github: "solidusio/solidus_auth_devise"
 gem "state_machines", "~> 0.6.0"
 
 case ENV["DB"]
